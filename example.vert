@@ -3,6 +3,7 @@
 uniform mat4 perspective;
 uniform mat4 view;
 uniform mat4 model;
+uniform mat3 view_rot_inv;
 
 in vec4 vertex;
 in vec3 normal;
@@ -20,8 +21,8 @@ void main()
     gl_Position = perspective * view_pos;
 
     world_normal = mat3(model) * normal;
-        
-    world_view = inverse(mat3(view))*-normalize(view_pos.xyz);
+
+    world_view = view_rot_inv*-normalize(view_pos.xyz);
 
     frag_color = color;
 }

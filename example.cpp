@@ -300,6 +300,7 @@ void draw(const Mesh& mesh, const mat4& perspective, const mat4& view, const mat
     // Set uniforms
     GLint perspective_uniform    = glGetUniformLocation(shader_program, "perspective");
     GLint view_uniform           = glGetUniformLocation(shader_program, "view");
+    GLint view_rot_inv_uniform   = glGetUniformLocation(shader_program, "view_rot_inv");
     GLint model_uniform          = glGetUniformLocation(shader_program, "model");
     GLint light_pos_uniform      = glGetUniformLocation(shader_program, "light_pos");
     GLint light_color_uniform    = glGetUniformLocation(shader_program, "light_color");
@@ -309,6 +310,7 @@ void draw(const Mesh& mesh, const mat4& perspective, const mat4& view, const mat
 
     glUniformMatrix4fv(perspective_uniform, 1, GL_FALSE, glm::value_ptr(perspective));
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix3fv(view_rot_inv_uniform, 1, GL_FALSE, glm::value_ptr(glm::inverse(glm::mat3(view))));
     glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
     
     glUniform3fv(light_pos_uniform, 1, glm::value_ptr(light_pos));
