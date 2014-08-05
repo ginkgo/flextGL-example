@@ -50,11 +50,15 @@ int main()
 	// Set OpenGL version from generated flextGL flags
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FLEXT_MAJOR_VERSION);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, FLEXT_MINOR_VERSION);
+    #ifndef TARGET_GLES
 	if (FLEXT_CORE_PROFILE) {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	} else {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	}
+    #else
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    #endif
 
 	// Create GLFW window
 	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "flextGL GLFW3 example", NULL, NULL);
@@ -107,10 +111,16 @@ void display_loop(GLFWwindow* window)
     Mesh mesh;
     create_donut(mesh, 1.0, 0.25, 128, 32);
 
+    #ifndef TARGET_GLES
     glEnable(GL_FRAMEBUFFER_SRGB);
+    #endif
     glEnable(GL_DEPTH_TEST);
 
+    #ifndef TARGET_GLES
     init_shaders("example.vert", "example.frag");
+    #else
+    init_shaders("example-es.vert", "example-es.frag");
+    #endif
     init_buffers(mesh);
 
     bool running = true;
@@ -242,8 +252,13 @@ void free_shaders()
 void init_buffers(const Mesh& mesh)
 {
     // Create and bind VAO
+    #ifndef TARGET_GLES
     glGenVertexArrays(1, &mesh_vao);
     glBindVertexArray(mesh_vao);
+    #else
+    glGenVertexArraysOES(1, &mesh_vao);
+    glBindVertexArrayOES(mesh_vao);
+    #endif
 
 
     // Create VBOs
@@ -278,13 +293,21 @@ void init_buffers(const Mesh& mesh)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.index_count * sizeof(GLuint), mesh.indices, GL_STATIC_DRAW);
 
+    #ifndef TARGET_GLES
     glBindVertexArray(0);
-                 
+    #else
+    glBindVertexArrayOES(0);
+    #endif
+
 }
 
 void free_buffers()
 {
+    #ifndef TARGET_GLES
     glDeleteVertexArrays(1, &mesh_vao);
+    #else
+    glDeleteVertexArraysOES(1, &mesh_vao);
+    #endif
 
     glDeleteBuffers(1, &vertex_buffer);
     glDeleteBuffers(1, &color_buffer);
@@ -321,13 +344,21 @@ void draw(const Mesh& mesh, const mat4& perspective, const mat4& view, const mat
 
 
     // Bind VAO
+    #ifndef TARGET_GLES
     glBindVertexArray(mesh_vao);
+    #else
+    glBindVertexArrayOES(mesh_vao);
+    #endif
 
     // Draw mesh
     glDrawElements(mesh.primitive_type, mesh.index_count, GL_UNSIGNED_INT, NULL);
 
     // Unbind VAO
+    #ifndef TARGET_GLES
     glBindVertexArray(0);
+    #else
+    glBindVertexArrayOES(0);
+    #endif
 
     // Unbind shaders
     glUseProgram(0);
