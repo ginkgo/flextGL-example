@@ -14,7 +14,7 @@ in vec3 world_view;
 
 vec4 diffuse(vec4 mat_color, vec4 light_color, vec3 N, vec3 L)
 {
-    return mat_color * light_color * max(0, dot(N,L));
+    return mat_color * light_color * max(0.0, dot(N,L));
 }
 
 vec4 specular(vec4 light_color, float coeff, float shininess, 
@@ -22,7 +22,7 @@ vec4 specular(vec4 light_color, float coeff, float shininess,
 {
     vec3 H = normalize(L+V);
 
-    return light_color * coeff * pow(max(0,dot(N,H)), shininess);
+    return light_color * coeff * pow(max(0.0,dot(N,H)), shininess);
 }
 
 void main()
