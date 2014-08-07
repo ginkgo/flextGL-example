@@ -27,6 +27,12 @@ Just call `make` to build the example program.
 
 You can find the build script in `Makefile`.
 
+To build the example with OpenGL ES you can use the alternative `Makefile.es`.
+
+    make -f Makefile.es
+    
+You might have to perform a `make clean` first.
+
 CMake
 -----
 
@@ -40,6 +46,8 @@ For building under Linux, call:
     make
 
 This should build the example in the separate build directory and copy all files necessary for execution in there.
+
+You can enable OpenGL ES output by toggling the `TARGET_GLES` CMake option.
 
 For building with Windows and Visual Studio, the easiest way is to use cmake-gui. Select the path of the example
 project. Select a build path and click on "Generate". This will let you select the compiler chain. There is currently only precompiled libraries for 32-bit Visual Studio 2008 and 2010 included.
