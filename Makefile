@@ -23,7 +23,7 @@ utility.o: utility.cpp $(HEADERS)
 flextGL.o: generated/flextGL.c
 	gcc $(CFLAGS) -c generated/flextGL.c
 
-generated/flextGL.c generated/flextGL.h: profile.txt functionlist.txt $(FLEXT_TEMPLATES) $(FLEXT_SCRIPTS)
+generated/flextGL.c generated/flextGL.h: profile.txt $(FLEXT_TEMPLATES) $(FLEXT_SCRIPTS)
 	python3 flextGL/flextGLgen.py -T glfw3 -D generated profile.txt
 
 clean:
